@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestClient;
-import ru.practicum.dto.EndpointHit;
+import ru.practicum.dto.EndpointHitDto;
 
 import java.util.Map;
 
@@ -17,7 +17,7 @@ public class StatsClient {
         rest = RestClient.create(serverUrl);
     }
 
-    public ResponseEntity<Object> saveHit(EndpointHit hit) {
+    public ResponseEntity<Object> saveHit(EndpointHitDto hit) {
         return rest.post()
                 .uri("/hit")
                 .body(hit)

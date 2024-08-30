@@ -8,8 +8,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.practicum.dto.EndpointHit;
+import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStats;
+import ru.practicum.server.model.EndpointHit;
 
 import java.sql.Timestamp;
 import java.util.Collections;
@@ -31,7 +32,7 @@ public class ServerController {
 
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
-    public EndpointHit saveHit(@RequestBody EndpointHit hit) {
+    public EndpointHit saveHit(@RequestBody EndpointHitDto hit) {
         return serverService.saveHit(hit);
     }
 }

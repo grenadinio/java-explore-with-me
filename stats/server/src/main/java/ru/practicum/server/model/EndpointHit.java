@@ -1,4 +1,4 @@
-package ru.practicum.dto;
+package ru.practicum.server.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
@@ -7,15 +7,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@RequiredArgsConstructor
 @Data
 @Entity
 @Table(name = "events")
+@AllArgsConstructor
 public class EndpointHit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
