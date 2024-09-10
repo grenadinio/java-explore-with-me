@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import ru.practicum.dto.ViewStats;
 import ru.practicum.server.model.EndpointHit;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -19,8 +19,8 @@ public interface ServerRepository extends JpaRepository<EndpointHit, Long> {
             AND (:uris is null or e.uri IN (:uris))
             GROUP BY e.uri, e.app
             ORDER BY hits DESC""", nativeQuery = true)
-    List<ViewStats> findByParams(@Param("start") Timestamp start,
-                                 @Param("end") Timestamp end,
+    List<ViewStats> findByParams(@Param("start") LocalDateTime start,
+                                 @Param("end") LocalDateTime end,
                                  @Param("uris") List<String> uris);
 
     @Query(value = """
@@ -30,7 +30,7 @@ public interface ServerRepository extends JpaRepository<EndpointHit, Long> {
             AND (:uris is null or e.uri IN (:uris))
             GROUP BY e.uri, e.app
             ORDER BY hits DESC""", nativeQuery = true)
-    List<ViewStats> findByParamsUniqueIp(@Param("start") Timestamp start,
-                                         @Param("end") Timestamp end,
+    List<ViewStats> findByParamsUniqueIp(@Param("start") LocalDateTime start,
+                                         @Param("end") LocalDateTime end,
                                          @Param("uris") List<String> uris);
 }

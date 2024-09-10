@@ -1,19 +1,22 @@
 package ru.practicum.client;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestClient;
 import ru.practicum.dto.EndpointHitDto;
+import ru.practicum.dto.ViewStats;
 
+import java.util.List;
 import java.util.Map;
 
-@Service
+@Component
 public class StatsClient {
     protected final RestClient rest;
 
-    public StatsClient(@Value("${statistic-server.url}") String serverUrl) {
+    public StatsClient(@Value("http://localhost:9090") String serverUrl) {
         rest = RestClient.create(serverUrl);
     }
 
@@ -25,7 +28,7 @@ public class StatsClient {
                 .toEntity(Object.class);
     }
 
-    public ResponseEntity<Object> getStatistics(Map<String, Object> parameters) {
+    public ResponseEntity<List<ViewStats>> getStatistics(Map<String, Object> parameters) {
         LinkedMultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
 
         parameters.forEach((key, value) -> {
@@ -37,6 +40,8 @@ public class StatsClient {
                         .queryParams(queryParams)
                         .build())
                 .retrieve()
-                .toEntity(Object.class);
+                .toEntity(new ParameterizedTypeReference<List<ViewStats>>() {
+                });
     }
+
 }
