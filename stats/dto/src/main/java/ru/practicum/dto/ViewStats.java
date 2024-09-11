@@ -1,9 +1,20 @@
 package ru.practicum.dto;
 
-public interface ViewStats {
-    String getApp();
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
-    String getUri();
+@Data
+@JsonIgnoreProperties(ignoreUnknown = true)
+@AllArgsConstructor
+public class ViewStats {
+    @JsonProperty("app")
+    private String app;
 
-    Long getHits();
+    @JsonProperty("uri")
+    private String uri;
+
+    @JsonProperty("hits")
+    private Long hits;
 }

@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.mainservice.exception.ConflictException;
 import ru.practicum.mainservice.exception.NotFoundException;
 import ru.practicum.mainservice.model.category.CategoriesMapper;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CategoriesService {
     private final CategoriesRepository repository;
     private final EventsRepository eventsRepository;
@@ -48,6 +50,7 @@ public class CategoriesService {
         return mapper.toCategoryDto(category);
     }
 
+    @Transactional(readOnly = true)
     public List<CategoryDto> getAllCategories(Integer from, Integer size) {
         Sort sortById = Sort.by(Sort.Direction.ASC, "id");
         int startPage = from > 0 ? (from / size) : 0;
@@ -58,6 +61,7 @@ public class CategoriesService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public CategoryDto getCategoryById(Long catId) {
         return mapper.toCategoryDto(validateAndGetCategory(catId));
     }

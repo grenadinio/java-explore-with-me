@@ -16,7 +16,7 @@ import java.util.Map;
 public class StatsClient {
     protected final RestClient rest;
 
-    public StatsClient(@Value("stat.server.url") String serverUrl) {
+    public StatsClient(@Value("${STATS_SERVER_URL}") String serverUrl) {
         rest = RestClient.create(serverUrl);
     }
 

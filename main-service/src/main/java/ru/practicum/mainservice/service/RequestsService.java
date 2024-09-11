@@ -2,6 +2,7 @@ package ru.practicum.mainservice.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.mainservice.exception.ConflictException;
 import ru.practicum.mainservice.exception.NotAllowedException;
 import ru.practicum.mainservice.exception.NotFoundException;
@@ -21,12 +22,14 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class RequestsService {
     private final RequestsRepository repository;
     private final UsersRepository usersRepository;
     private final EventsRepository eventsRepository;
     private final RequestsMapper mapper;
 
+    @Transactional(readOnly = true)
     public List<ParticipationRequestDto> getEventsRequestsByUserId(Long userId) {
         return repository
                 .findByRequesterId(userId)

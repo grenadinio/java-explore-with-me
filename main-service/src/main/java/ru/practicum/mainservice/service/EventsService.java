@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.client.StatsClient;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.mainservice.ConnectToStatServer;
@@ -41,6 +42,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class EventsService {
     private final EventsRepository repository;
     private final CategoriesRepository categoriesRepository;
@@ -55,6 +57,7 @@ public class EventsService {
     private static final LocalDateTime MIN_DATETIME = LocalDateTime.of(1970, 1, 1, 0, 0, 0);
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+    @Transactional(readOnly = true)
     public List<EventFullDto> getAllEventsAdmin(List<Long> users, List<String> states, List<Long> categories,
                                                 String rangeStart, String rangeEnd, Integer from, Integer size) {
         LocalDateTime start = rangeStart == null ? MIN_DATETIME : LocalDateTime.parse(rangeStart, DATE_FORMATTER);
@@ -133,6 +136,7 @@ public class EventsService {
         return eventFull;
     }
 
+    @Transactional(readOnly = true)
     public List<EventShortDto> getUserEvents(Long userId, Integer from, Integer size) {
         int startPage = from > 0 ? (from / size) : 0;
         Pageable pageable = PageRequest.of(startPage, size);
@@ -194,6 +198,7 @@ public class EventsService {
         return eventMapper.toEventFullDto(saved);
     }
 
+    @Transactional(readOnly = true)
     public EventFullDto getUserEventById(Long userId, Long eventId, String path) {
         Event event = validateAndGetEvent(eventId);
         long confirmedRequests = requestsRepository
@@ -289,6 +294,7 @@ public class EventsService {
 
     }
 
+    @Transactional(readOnly = true)
     public List<EventShortDto> getAllEvents(String text, List<Long> categories, String paid,
                                             String rangeStart, String rangeEnd, boolean onlyAvailable,
                                             String sort, Integer from, Integer size, HttpServletRequest request) {
@@ -361,6 +367,7 @@ public class EventsService {
 
     }
 
+    @Transactional(readOnly = true)
     public EventFullDto getEventsById(Long eventId, HttpServletRequest request) {
         Event event = repository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Событие по ID: " + eventId + " не найдено."));

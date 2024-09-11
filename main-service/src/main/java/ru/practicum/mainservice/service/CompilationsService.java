@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.mainservice.exception.NotFoundException;
 import ru.practicum.mainservice.model.compilation.Compilation;
 import ru.practicum.mainservice.model.compilation.CompilationDto;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class CompilationsService {
     private final CompilationsRepository repository;
     private final EventByCompilationRepository eventByCompilationRepository;
@@ -75,6 +77,7 @@ public class CompilationsService {
         return mapper.toCompilationDto(repository.save(compilation), events);
     }
 
+    @Transactional(readOnly = true)
     public List<CompilationDto> getAllCompilations(boolean pinned, Integer from, Integer size) {
         int startPage = from > 0 ? (from / size) : 0;
         Pageable pageable = PageRequest.of(startPage, size);
@@ -120,6 +123,7 @@ public class CompilationsService {
         return compilationResponses;
     }
 
+    @Transactional(readOnly = true)
     public CompilationDto getCompilationById(Long compId) {
         Compilation compilation = validateAndGetCompilation(compId);
         List<EventShortDto> events = eventByCompilationRepository.findEventsByCompilationId(compId).stream()

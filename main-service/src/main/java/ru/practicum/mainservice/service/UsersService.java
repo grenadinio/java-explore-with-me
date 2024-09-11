@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.mainservice.exception.ConflictException;
 import ru.practicum.mainservice.exception.NotFoundException;
 import ru.practicum.mainservice.model.user.NewUserRequest;
@@ -21,10 +22,12 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class UsersService {
     private final UsersRepository repository;
     private final UserMapper mapper;
 
+    @Transactional(readOnly = true)
     public List<UserDto> getAllUsers(List<Integer> ids, Integer from, Integer size) {
         Sort sortDyId = Sort.by(Sort.Direction.ASC, "id");
         int startPage = from > 0 ? (from / size) : 0;
