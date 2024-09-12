@@ -22,24 +22,24 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/admin/users")
 public class AdminUsersController {
-    private final UsersService service;
+    private final UsersService usersService;
 
     @GetMapping
     public List<UserDto> getAllUsers(@RequestParam(required = false) List<Integer> ids,
                                      @RequestParam(defaultValue = "0") Integer from,
                                      @RequestParam(defaultValue = "10") Integer size) {
-        return service.getAllUsers(ids, from, size);
+        return usersService.getAllUsers(ids, from, size);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto createUser(@RequestBody @Valid NewUserRequest body) {
-        return service.createUser(body);
+        return usersService.createUser(body);
     }
 
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable Long userId) {
-        service.deleteUser(userId);
+        usersService.deleteUser(userId);
     }
 }

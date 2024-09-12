@@ -19,6 +19,8 @@ public class ExceptionController {
     public ApiError handleConstraintViolationException(ConstraintViolationException e) {
         String reason = "Incorrectly made request.";
         String message = e.getMessage();
+        log.error("Exception: {}", e.getClass().getSimpleName());
+        log.error("Error: ", e);
         return new ApiError(HttpStatus.BAD_REQUEST.getReasonPhrase(), reason, message, prepareResponseTimeStamp());
     }
 
@@ -27,6 +29,8 @@ public class ExceptionController {
     public ApiError handleValidationException(ValidationException e) {
         String reason = "Incorrectly made request.";
         String message = e.getMessage();
+        log.error("Exception: {}", e.getClass().getSimpleName());
+        log.error("Error: ", e);
         return new ApiError(HttpStatus.BAD_REQUEST.getReasonPhrase(), reason, message, prepareResponseTimeStamp());
     }
 
@@ -35,6 +39,8 @@ public class ExceptionController {
     public ApiError handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
         String reason = "Incorrectly made request.";
         String message = e.getMessage();
+        log.error("Exception: {}", e.getClass().getSimpleName());
+        log.error("Error: ", e);
         return new ApiError(HttpStatus.BAD_REQUEST.getReasonPhrase(), reason, message, prepareResponseTimeStamp());
     }
 

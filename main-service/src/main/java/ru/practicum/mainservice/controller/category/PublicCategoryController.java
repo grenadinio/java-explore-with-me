@@ -15,16 +15,16 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/categories")
 public class PublicCategoryController {
-    private final CategoriesService service;
+    private final CategoriesService categoriesService;
 
     @GetMapping
     public List<CategoryDto> getAllCategories(@RequestParam(defaultValue = "0") Integer from,
                                               @RequestParam(defaultValue = "10") Integer size) {
-        return service.getAllCategories(from, size);
+        return categoriesService.getAllCategories(from, size);
     }
 
     @GetMapping("/{catId}")
     public CategoryDto getCategoryById(@PathVariable Long catId) {
-        return service.getCategoryById(catId);
+        return categoriesService.getCategoryById(catId);
     }
 }

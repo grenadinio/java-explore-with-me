@@ -24,25 +24,25 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional
 public class RequestsService {
-    private final RequestsRepository repository;
+    private final RequestsRepository requestsRepository;
     private final UsersRepository usersRepository;
     private final EventsRepository eventsRepository;
-    private final RequestsMapper mapper;
+    private final RequestsMapper requestsMapper;
 
     @Transactional(readOnly = true)
     public List<ParticipationRequestDto> getEventsRequestsByUserId(Long userId) {
-        return repository
+        return requestsRepository
                 .findByRequesterId(userId)
                 .stream()
-                .map(mapper::toRequestDto)
+                .map(requestsMapper::toRequestDto)
                 .toList();
     }
 
     public ParticipationRequestDto createUserEventRequest(Long userId, Long eventId) {
         User user = validateAndGetUser(userId);
         Event event = validateAndGetEvent(eventId);
-        List<Request> userRequests = repository.findByRequesterId(userId);
-        long requestAmountForEvent = repository.countByEventIdAndStatus(event.getId(), "CONFIRMED");
+        List<Request> userRequests = requestsRepository.findByRequesterId(userId);
+        long requestAmountForEvent = requestsRepository.countByEventIdAndStatus(event.getId(), "CONFIRMED");
 
         for (Request request : userRequests) {
             if (Objects.equals(request.getEvent().getId(), eventId)) {
@@ -73,7 +73,7 @@ public class RequestsService {
             request.setStatus("PENDING");
         }
 
-        return mapper.toRequestDto(repository.save(request));
+        return requestsMapper.toRequestDto(requestsRepository.save(request));
     }
 
     public ParticipationRequestDto cancelUserEventRequest(Long userId, Long requestId) {
@@ -82,11 +82,11 @@ public class RequestsService {
             throw new NotAllowedException("You are not allowed to cancel request with id = " + requestId);
         }
         request.setStatus("CANCELED");
-        return mapper.toRequestDto(repository.save(request));
+        return requestsMapper.toRequestDto(requestsRepository.save(request));
     }
 
     private Request validateAndGetRequest(long requestId) {
-        Optional<Request> request = repository.findById(requestId);
+        Optional<Request> request = requestsRepository.findById(requestId);
 
         if (request.isEmpty()) {
             throw new NotFoundException("Request with id = " + request + " was not found");

@@ -15,17 +15,17 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/compilations")
 public class PublicCompilationController {
-    private final CompilationsService service;
+    private final CompilationsService compilationsService;
 
     @GetMapping
     public List<CompilationDto> getAllCompilations(@RequestParam(required = false) boolean pinned,
                                                    @RequestParam(defaultValue = "0") Integer from,
                                                    @RequestParam(defaultValue = "10") Integer size) {
-        return service.getAllCompilations(pinned, from, size);
+        return compilationsService.getAllCompilations(pinned, from, size);
     }
 
     @GetMapping("/{compId}")
     public CompilationDto getCompilationById(@PathVariable Long compId) {
-        return service.getCompilationById(compId);
+        return compilationsService.getCompilationById(compId);
     }
 }

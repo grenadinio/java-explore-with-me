@@ -24,8 +24,8 @@ import java.util.stream.Collectors;
 @Slf4j
 @Transactional
 public class UsersService {
-    private final UsersRepository repository;
-    private final UserMapper mapper;
+    private final UsersRepository usersRepository;
+    private final UserMapper userMapper;
 
     @Transactional(readOnly = true)
     public List<UserDto> getAllUsers(List<Integer> ids, Integer from, Integer size) {
@@ -34,36 +34,36 @@ public class UsersService {
         Pageable pageable = PageRequest.of(startPage, size, sortDyId);
 
         if (ids == null) {
-            return repository.findAll(pageable)
+            return usersRepository.findAll(pageable)
                     .stream()
-                    .map(mapper::toUserDto)
+                    .map(userMapper::toUserDto)
                     .collect(Collectors.toList());
         }
-        return repository.findByIdIn(List.copyOf(ids), pageable)
+        return usersRepository.findByIdIn(List.copyOf(ids), pageable)
                 .stream()
-                .map(mapper::toUserDto)
+                .map(userMapper::toUserDto)
                 .collect(Collectors.toList());
     }
 
     public UserDto createUser(NewUserRequest newUserRequest) {
         checkEmail(newUserRequest.getEmail());
-        return mapper.toUserDto(repository.save(mapper.toUser(newUserRequest)));
+        return userMapper.toUserDto(usersRepository.save(userMapper.toUser(newUserRequest)));
     }
 
     public void deleteUser(Long userId) {
         validateUser(userId);
-        repository.deleteById(userId);
+        usersRepository.deleteById(userId);
     }
 
     private void validateUser(Long userId) {
-        Optional<User> user = repository.findById(userId);
+        Optional<User> user = usersRepository.findById(userId);
         if (user.isEmpty()) {
             throw new NotFoundException("User with id = " + userId + " was not found");
         }
     }
 
     private void checkEmail(String email) {
-        List<User> user = repository.findByEmail(email);
+        List<User> user = usersRepository.findByEmail(email);
         if (!user.isEmpty()) {
             throw new ConflictException("Email не может повторяться.");
         }

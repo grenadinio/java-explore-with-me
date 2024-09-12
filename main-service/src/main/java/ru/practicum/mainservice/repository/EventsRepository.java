@@ -3,6 +3,7 @@ package ru.practicum.mainservice.repository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 import ru.practicum.mainservice.model.event.Event;
 
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface EventsRepository extends JpaRepository<Event, Long> {
     @Query("SELECT e FROM Event e WHERE e.category.id = :id")
     Collection<Event> findByCategoryId(Long id);

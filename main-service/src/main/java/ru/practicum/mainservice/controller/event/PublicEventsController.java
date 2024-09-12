@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/events")
 public class PublicEventsController {
-    private final EventsService service;
+    private final EventsService eventsService;
 
     @GetMapping
     public List<EventShortDto> getAllEvents(@RequestParam(required = false) String text,
@@ -30,11 +30,11 @@ public class PublicEventsController {
                                             @RequestParam(defaultValue = "0") Integer from,
                                             @RequestParam(defaultValue = "10") Integer size,
                                             HttpServletRequest request) {
-        return service.getAllEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size, request);
+        return eventsService.getAllEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size, request);
     }
 
     @GetMapping("/{id}")
     public EventFullDto getEventsById(@PathVariable Long id, HttpServletRequest request) {
-        return service.getEventsById(id, request);
+        return eventsService.getEventsById(id, request);
     }
 }

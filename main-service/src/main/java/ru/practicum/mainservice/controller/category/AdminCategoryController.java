@@ -19,23 +19,23 @@ import ru.practicum.mainservice.service.CategoriesService;
 @RequiredArgsConstructor
 @RequestMapping("/admin/categories")
 public class AdminCategoryController {
-    private final CategoriesService service;
+    private final CategoriesService categoriesService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CategoryDto createCategory(@RequestBody @Valid NewCategoryDto body) {
-        return service.createCategory(body);
+        return categoriesService.createCategory(body);
     }
 
     @DeleteMapping("/{catId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategory(@PathVariable Long catId) {
-        service.deleteCategory(catId);
+        categoriesService.deleteCategory(catId);
     }
 
     @PatchMapping("/{catId}")
     public CategoryDto updateCategory(@PathVariable Long catId,
                                       @RequestBody @Valid CategoryDto body) {
-        return service.updateCategory(catId, body);
+        return categoriesService.updateCategory(catId, body);
     }
 }

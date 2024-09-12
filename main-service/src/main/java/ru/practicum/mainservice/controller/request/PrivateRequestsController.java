@@ -19,23 +19,23 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/users")
 public class PrivateRequestsController {
-    private final RequestsService service;
+    private final RequestsService requestsService;
 
     @GetMapping("/{userId}/requests")
     public List<ParticipationRequestDto> getEventsRequestsByUserId(@PathVariable Long userId) {
-        return service.getEventsRequestsByUserId(userId);
+        return requestsService.getEventsRequestsByUserId(userId);
     }
 
     @PostMapping("/{userId}/requests")
     @ResponseStatus(HttpStatus.CREATED)
     public ParticipationRequestDto createUserEventRequest(@PathVariable Long userId,
                                                           @RequestParam Long eventId) {
-        return service.createUserEventRequest(userId, eventId);
+        return requestsService.createUserEventRequest(userId, eventId);
     }
 
     @PatchMapping("/{userId}/requests/{requestId}/cancel")
     public ParticipationRequestDto cancelUserEventRequest(@PathVariable Long userId,
                                                           @PathVariable Long requestId) {
-        return service.cancelUserEventRequest(userId, requestId);
+        return requestsService.cancelUserEventRequest(userId, requestId);
     }
 }

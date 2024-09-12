@@ -33,26 +33,26 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional
 public class CompilationsService {
-    private final CompilationsRepository repository;
+    private final CompilationsRepository compilationsRepository;
     private final EventByCompilationRepository eventByCompilationRepository;
     private final EventsRepository eventsRepository;
-    private final CompilationsMapper mapper;
+    private final CompilationsMapper compilationsMapper;
     private final EventMapper eventMapper;
 
     public CompilationDto createCompilation(NewCompilationDto newCompilationDto) {
         if (newCompilationDto.getPinned() == null) {
             newCompilationDto.setPinned(false);
         }
-        Compilation compilation = repository.save(mapper.toCompilation(newCompilationDto));
+        Compilation compilation = compilationsRepository.save(compilationsMapper.toCompilation(newCompilationDto));
 
         List<EventShortDto> events = addEventsToCompilation(compilation.getId(), newCompilationDto.getEvents());
 
-        return mapper.toCompilationDto(compilation, events);
+        return compilationsMapper.toCompilationDto(compilation, events);
     }
 
     public void deleteCompilation(Long compId) {
         validateAndGetCompilation(compId);
-        repository.deleteById(compId);
+        compilationsRepository.deleteById(compId);
     }
 
     public CompilationDto updateCompilation(Long compId, UpdateCompilationRequest updateCompilationRequest) {
@@ -74,7 +74,7 @@ public class CompilationsService {
                     .toList();
         }
 
-        return mapper.toCompilationDto(repository.save(compilation), events);
+        return compilationsMapper.toCompilationDto(compilationsRepository.save(compilation), events);
     }
 
     @Transactional(readOnly = true)
@@ -82,7 +82,7 @@ public class CompilationsService {
         int startPage = from > 0 ? (from / size) : 0;
         Pageable pageable = PageRequest.of(startPage, size);
 
-        Map<Long, Compilation> compilationMap = repository.findAll(pageable)
+        Map<Long, Compilation> compilationMap = compilationsRepository.findAll(pageable)
                 .stream()
                 .collect(Collectors.toMap(Compilation::getId, Function.identity()));
 
@@ -118,7 +118,7 @@ public class CompilationsService {
             if (events == null) {
                 events = List.of();
             }
-            compilationResponses.add(mapper.toCompilationDto(compilation, events));
+            compilationResponses.add(compilationsMapper.toCompilationDto(compilation, events));
         }
         return compilationResponses;
     }
@@ -129,11 +129,11 @@ public class CompilationsService {
         List<EventShortDto> events = eventByCompilationRepository.findEventsByCompilationId(compId).stream()
                 .map(eventMapper::toEventShortDto)
                 .toList();
-        return mapper.toCompilationDto(compilation, events);
+        return compilationsMapper.toCompilationDto(compilation, events);
     }
 
     private Compilation validateAndGetCompilation(Long compId) {
-        Optional<Compilation> compilation = repository.findById(compId);
+        Optional<Compilation> compilation = compilationsRepository.findById(compId);
 
         if (compilation.isEmpty()) {
             throw new NotFoundException("Compilation with id = " + compId + " was not found");

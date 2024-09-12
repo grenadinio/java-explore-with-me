@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional
 public class EventsService {
-    private final EventsRepository repository;
+    private final EventsRepository eventsRepository;
     private final CategoriesRepository categoriesRepository;
     private final LocationsRepository locationRepository;
     private final RequestsRepository requestsRepository;
@@ -66,7 +66,7 @@ public class EventsService {
         int startPage = from > 0 ? (from / size) : 0;
         Pageable pageable = PageRequest.of(startPage, size);
 
-        List<EventFullDto> eventRespFulls = repository
+        List<EventFullDto> eventRespFulls = eventsRepository
                 .findByConditionals(states, categories, users, start, end, pageable)
                 .stream()
                 .map(eventMapper::toEventFullDto)
@@ -128,7 +128,7 @@ public class EventsService {
             locationRepository.save(updateRequest.getLocation());
         }
 
-        Event updatedEvent = repository.save(updateEvent(event, updateRequest, category));
+        Event updatedEvent = eventsRepository.save(updateEvent(event, updateRequest, category));
         long confirmedRequests = requestsRepository
                 .countByEventIdAndStatus(eventId, "CONFIRMED");
         EventFullDto eventFull = eventMapper.toEventFullDto(updatedEvent);
@@ -141,7 +141,7 @@ public class EventsService {
         int startPage = from > 0 ? (from / size) : 0;
         Pageable pageable = PageRequest.of(startPage, size);
 
-        List<EventShortDto> events = repository.findByInitiatorId(userId, pageable)
+        List<EventShortDto> events = eventsRepository.findByInitiatorId(userId, pageable)
                 .stream()
                 .map(eventMapper::toEventShortDto)
                 .toList();
@@ -194,7 +194,7 @@ public class EventsService {
         addingEvent.setCreatedOn(LocalDateTime.now());
         addingEvent.setState("PENDING");
 
-        Event saved = repository.save(addingEvent);
+        Event saved = eventsRepository.save(addingEvent);
         return eventMapper.toEventFullDto(saved);
     }
 
@@ -229,7 +229,7 @@ public class EventsService {
             category = validateAndGetCategory(updateEventRequest.getCategory());
         }
 
-        Event updatedEvent = repository.save(updateEvent(updatingEvent, updateEventRequest, category));
+        Event updatedEvent = eventsRepository.save(updateEvent(updatingEvent, updateEventRequest, category));
         return eventMapper.toEventFullDto(updatedEvent);
     }
 
@@ -327,13 +327,13 @@ public class EventsService {
         validateDates(start, end);
         List<EventShortDto> events;
         if (paid == null) {
-            events = repository
+            events = eventsRepository
                     .searchEventsNotLookingOnPaid(text, categories, start, end, onlyAvailable, pageable)
                     .stream()
                     .map(eventMapper::toEventShortDto)
                     .toList();
         } else {
-            events = repository
+            events = eventsRepository
                     .searchEvents(text, categories, Boolean.parseBoolean(paid), start, end, onlyAvailable, pageable)
                     .stream()
                     .map(eventMapper::toEventShortDto)
@@ -369,7 +369,7 @@ public class EventsService {
 
     @Transactional(readOnly = true)
     public EventFullDto getEventsById(Long eventId, HttpServletRequest request) {
-        Event event = repository.findById(eventId)
+        Event event = eventsRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Событие по ID: " + eventId + " не найдено."));
         if (!event.getState().equals("PUBLISHED")) {
             throw new NotFoundException("Событие по ID: " + eventId + " не найдено.");
@@ -393,7 +393,7 @@ public class EventsService {
     }
 
     private Event validateAndGetEvent(long eventId) {
-        Optional<Event> event = repository.findById(eventId);
+        Optional<Event> event = eventsRepository.findById(eventId);
         if (event.isEmpty()) {
             throw new NotFoundException("Event with id = " + eventId + " was not found");
         }

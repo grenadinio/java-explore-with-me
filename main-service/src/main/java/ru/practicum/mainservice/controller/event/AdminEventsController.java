@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/admin/events")
 public class AdminEventsController {
-    private final EventsService service;
+    private final EventsService eventsService;
 
     @GetMapping
     public List<EventFullDto> getAllEvents(@RequestParam(required = false) List<Long> users,
@@ -31,12 +31,12 @@ public class AdminEventsController {
                                            String rangeEnd,
                                            @RequestParam(defaultValue = "0") Integer from,
                                            @RequestParam(defaultValue = "10") Integer size) {
-        return service.getAllEventsAdmin(users, states, categories, rangeStart, rangeEnd, from, size);
+        return eventsService.getAllEventsAdmin(users, states, categories, rangeStart, rangeEnd, from, size);
     }
 
     @PatchMapping("/{eventId}")
     public EventFullDto updateEvent(@PathVariable Long eventId,
                                     @RequestBody @Valid UpdateEventRequest body) {
-        return service.updateEventAdmin(eventId, body);
+        return eventsService.updateEventAdmin(eventId, body);
     }
 }

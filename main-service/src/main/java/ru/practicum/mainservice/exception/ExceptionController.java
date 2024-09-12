@@ -24,6 +24,8 @@ public class ExceptionController {
     public ApiError handleMissingServletRequestParameterException(final MissingServletRequestParameterException e) {
         String reason = "Incorrectly made request.";
         String message = e.getMessage();
+        log.error("Exception: {}", e.getClass().getSimpleName());
+        log.error("Error: ", e);
         return new ApiError(HttpStatus.BAD_REQUEST.getReasonPhrase(), reason, message, prepareResponseTimeStamp());
     }
 
@@ -32,6 +34,8 @@ public class ExceptionController {
     public ApiError handleConstraintViolationException(final ConstraintViolationException e) {
         String reason = "Incorrectly made request.";
         String message = e.getMessage();
+        log.error("Exception: {}", e.getClass().getSimpleName());
+        log.error("Error: ", e);
         return new ApiError(HttpStatus.BAD_REQUEST.getReasonPhrase(), reason, message, prepareResponseTimeStamp());
     }
 
@@ -40,6 +44,8 @@ public class ExceptionController {
     public ApiError handleIllegalArgumentException(final IllegalArgumentException e) {
         String reason = "Incorrectly made request.";
         String message = e.getMessage();
+        log.error("Exception: {}", e.getClass().getSimpleName());
+        log.error("Error: ", e);
         return new ApiError(HttpStatus.BAD_REQUEST.getReasonPhrase(), reason, message, prepareResponseTimeStamp());
     }
 
@@ -49,6 +55,8 @@ public class ExceptionController {
         String reason = e.getBody().getDetail();
         String message = "Field: " + Objects.requireNonNull(e.getBindingResult().getFieldError()).getField() +
                 " error: " + e.getBindingResult().getFieldError().getDefaultMessage();
+        log.error("Exception: {}", e.getClass().getSimpleName());
+        log.error("Error: ", e);
         return new ApiError(HttpStatus.BAD_REQUEST.getReasonPhrase(), reason, message, prepareResponseTimeStamp());
     }
 
@@ -57,7 +65,8 @@ public class ExceptionController {
     public ApiError handleNotFoundException(final NotFoundException e) {
         String reason = "Incorrectly made request.";
         String message = e.getMessage();
-        log.error("e: ", e);
+        log.error("Exception: {}", e.getClass().getSimpleName());
+        log.error("Error: ", e);
         return new ApiError(HttpStatus.NOT_FOUND.getReasonPhrase(), reason, message, prepareResponseTimeStamp());
     }
 
@@ -66,6 +75,8 @@ public class ExceptionController {
     public ApiError handleConflict(final DataIntegrityViolationException e) {
         String reason = "Integrity constraint has been violated";
         String message = "could not execute statement; constraint " + e.getMostSpecificCause();
+        log.error("Exception: {}", e.getClass().getSimpleName());
+        log.error("Error: ", e);
         return new ApiError(HttpStatus.CONFLICT.getReasonPhrase(), reason, message, prepareResponseTimeStamp());
     }
 
@@ -74,6 +85,8 @@ public class ExceptionController {
     public ApiError handleConflict(final ConflictException e) {
         String reason = "For the requested operation the conditions are not met.";
         String message = e.getMessage();
+        log.error("Exception: {}", e.getClass().getSimpleName());
+        log.error("Error: ", e);
         return new ApiError(HttpStatus.CONFLICT.getReasonPhrase(), reason, message, prepareResponseTimeStamp());
     }
 
@@ -82,6 +95,8 @@ public class ExceptionController {
     public ApiError handleValidationException(final ValidationException e) {
         String reason = "Incorrectly made request.";
         String message = e.getMessage();
+        log.error("Exception: {}", e.getClass().getSimpleName());
+        log.error("Error: ", e);
         return new ApiError(HttpStatus.BAD_REQUEST.getReasonPhrase(), reason, message, prepareResponseTimeStamp());
     }
 
@@ -90,6 +105,8 @@ public class ExceptionController {
     public ApiError handleNotAllowedException(final NotAllowedException e) {
         String reason = "Not allowed";
         String message = e.getMessage();
+        log.error("Exception: {}", e.getClass().getSimpleName());
+        log.error("Error: ", e);
         return new ApiError(HttpStatus.FORBIDDEN.getReasonPhrase(), reason, message, prepareResponseTimeStamp());
     }
 

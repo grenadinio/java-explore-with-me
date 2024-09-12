@@ -2,12 +2,14 @@ package ru.practicum.mainservice.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 import ru.practicum.mainservice.model.request.EventIdByRequestsCount;
 import ru.practicum.mainservice.model.request.Request;
 
 import java.util.Collection;
 import java.util.List;
 
+@Repository
 public interface RequestsRepository extends JpaRepository<Request, Long> {
     List<Request> findByRequesterId(long requesterId);
 

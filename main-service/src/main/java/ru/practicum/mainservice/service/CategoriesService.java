@@ -24,13 +24,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional
 public class CategoriesService {
-    private final CategoriesRepository repository;
+    private final CategoriesRepository categoriesRepository;
     private final EventsRepository eventsRepository;
-    private final CategoriesMapper mapper;
+    private final CategoriesMapper categoriesMapper;
 
     public CategoryDto createCategory(NewCategoryDto body) {
         checkName(body.getName());
-        return mapper.toCategoryDto(repository.save(mapper.toCategory(body)));
+        return categoriesMapper.toCategoryDto(categoriesRepository.save(categoriesMapper.toCategory(body)));
     }
 
     public void deleteCategory(Long catId) {
@@ -38,7 +38,7 @@ public class CategoriesService {
         if (!eventsRepository.findByCategoryId(catId).isEmpty()) {
             throw new ConflictException("The category is not empty");
         }
-        repository.deleteById(catId);
+        categoriesRepository.deleteById(catId);
     }
 
     public CategoryDto updateCategory(Long catId, CategoryDto categoryDto) {
@@ -47,7 +47,7 @@ public class CategoriesService {
             checkName(categoryDto.getName());
         }
         category.setName(categoryDto.getName());
-        return mapper.toCategoryDto(category);
+        return categoriesMapper.toCategoryDto(category);
     }
 
     @Transactional(readOnly = true)
@@ -55,19 +55,19 @@ public class CategoriesService {
         Sort sortById = Sort.by(Sort.Direction.ASC, "id");
         int startPage = from > 0 ? (from / size) : 0;
         Pageable pageable = PageRequest.of(startPage, size, sortById);
-        return repository.findAll(pageable)
+        return categoriesRepository.findAll(pageable)
                 .stream()
-                .map(mapper::toCategoryDto)
+                .map(categoriesMapper::toCategoryDto)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public CategoryDto getCategoryById(Long catId) {
-        return mapper.toCategoryDto(validateAndGetCategory(catId));
+        return categoriesMapper.toCategoryDto(validateAndGetCategory(catId));
     }
 
     private Category validateAndGetCategory(Long catId) {
-        Optional<Category> category = repository.findById(catId);
+        Optional<Category> category = categoriesRepository.findById(catId);
 
         if (category.isEmpty()) {
             throw new NotFoundException("Category with id = " + catId + " was not found");
@@ -76,7 +76,7 @@ public class CategoriesService {
     }
 
     private void checkName(String name) {
-        List<Category> categoriesSameName = repository.findAllByName(name);
+        List<Category> categoriesSameName = categoriesRepository.findAllByName(name);
 
         if (!categoriesSameName.isEmpty()) {
             throw new ConflictException("Имя категории не может повторяться.");
