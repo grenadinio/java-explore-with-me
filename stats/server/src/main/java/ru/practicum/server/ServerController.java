@@ -12,7 +12,8 @@ import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStats;
 import ru.practicum.server.model.EndpointHit;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,14 +21,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ServerController {
     private final ServerService serverService;
+    public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @GetMapping("/stats")
     public List<ViewStats> getStatistics(@RequestParam String start,
                                          @RequestParam String end,
                                          @RequestParam(required = false) List<String> uris,
-                                         @RequestParam(required = false, defaultValue = "false") boolean unique) {
+                                         @RequestParam(defaultValue = "false") boolean unique) {
         uris = uris == null ? Collections.emptyList() : uris;
-        return serverService.getStatistics(Timestamp.valueOf(start), Timestamp.valueOf(end), uris, unique);
+        return serverService.getStatistics(LocalDateTime.parse(start, DATE_FORMATTER),
+                LocalDateTime.parse(end, DATE_FORMATTER), uris, unique);
     }
 
     @PostMapping("/hit")
