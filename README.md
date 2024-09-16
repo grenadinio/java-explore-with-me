@@ -1,2 +1,3 @@
 # java-explore-with-me
-Template repository for ExploreWithMe project.
+
+[Pull Request #3 - Comments](https://github.com/grenadinio/java-explore-with-me/pull/3)
