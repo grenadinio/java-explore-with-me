@@ -906,7 +906,7 @@
                   "});\r",
                   "\r",
                   "pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
-                  "    pm.expect(target.id).to.not.be.null;\r",
+                  "    pm.expect(founded.id).to.not.be.null;\r",
                   "});"
                 ],
                 "type": "text/javascript",
