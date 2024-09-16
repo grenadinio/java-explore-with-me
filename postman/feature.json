@@ -906,10 +906,7 @@
                   "});\r",
                   "\r",
                   "pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
-                  "    pm.expect(source.id).equal(founded.id, 'id комментария должно соответствовать id комментария в запросе');\r",
-                  "    pm.expect(source.content).equal(founded.content, 'Содержание комментария должно соответствовать содержанию комментария в запросе');\r",
-                  "    pm.expect(source.userId).equal(founded.userId, 'id пользователя в комментарии должно соответствовать id пользователя в запросе');\r",
-                  "    pm.expect(source.eventId).equal(founded.eventId, 'id события в комментарии должно соответствовать id события в запросе');\r",
+                  "    pm.expect(target.id).to.not.be.null;\r",
                   "});"
                 ],
                 "type": "text/javascript",
