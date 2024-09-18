@@ -15,17 +15,17 @@ import ru.practicum.mainservice.service.CommentService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin/events/{eventId}/comments")
+@RequestMapping("/admin/events/{eventId}/comments/{commentId}")
 public class AdminCommentsController {
     private final CommentService commentService;
 
-    @PatchMapping("{commentId}")
+    @PatchMapping
     public CommentDto updateComment(@RequestBody UpdateCommentDto updateCommentRequest, @PathVariable Long eventId,
                                     @PathVariable Long commentId) {
         return commentService.updateCommentAdmin(eventId, commentId, updateCommentRequest);
     }
 
-    @DeleteMapping("{commentId}")
+    @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteComment(@PathVariable Long eventId, @PathVariable Long commentId) {
         commentService.deleteCommentAdmin(eventId, commentId);
